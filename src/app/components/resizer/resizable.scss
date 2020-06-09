@@ -1,0 +1,48 @@
+.resizable-block {
+    background: var(--text-color);
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 100px;
+    left: 100px;
+
+    .resizable-content {
+        width: 100%;
+        height: 100%;
+        border: 5px solid var(--primary-color);
+        box-sizing: border-box;
+
+        .anchor {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text-color);
+            border: 5px solid var(--primary-color);
+            position: absolute;
+
+            &.nw {
+                left: -6px;
+                top: -6px;
+                cursor: nwse-resize;
+            }
+
+            &.ne {
+                right: -6px;
+                top: -6px;
+                cursor: nesw-resize;
+            }
+
+            &.sw {
+                left: -6px;
+                bottom: -6px;
+                cursor: nesw-resize;
+            }
+
+            &.se {
+                right: -6px;
+                bottom: -6px;
+                cursor: nwse-resize;
+            }
+        }
+    }
+}
