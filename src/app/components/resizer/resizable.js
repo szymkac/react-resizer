@@ -42,8 +42,10 @@ const Resizable = () => {
 
     const onStartResize = onMouseDownEvent => {
         onMouseDownEvent.preventDefault()
-        window.addEventListener('mousemove', onResize);
-        window.addEventListener('mouseup', onStopResize)
+        const { parentElement } = resizableRef.current;
+        parentElement.addEventListener('mousemove', onResize);
+        parentElement.addEventListener('mouseup', onStopResize)
+        parentElement.addEventListener('mouseleave', onStopResize)
 
         const anchor = onMouseDownEvent.target.getAttribute('name');
 
@@ -52,8 +54,9 @@ const Resizable = () => {
         };
 
         function onStopResize() {
-            window.removeEventListener('mousemove', onResize);
-            window.removeEventListener('mouseup', onStopResize);
+            parentElement.removeEventListener('mousemove', onResize);
+            parentElement.removeEventListener('mouseleave', onStopResize)
+            parentElement.removeEventListener('mouseup', onStopResize);
         };
     };
 
