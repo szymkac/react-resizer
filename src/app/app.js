@@ -6,7 +6,9 @@ const App = () => {
   return (
     <main>
       <ResizerWrapper>
-        <Resizable></Resizable>
+        <Resizable left={'100px'} top={'100px'}>
+          <img src='https://pbs.twimg.com/profile_images/619691410992672768/TwSZQOYf_400x400.png' />
+        </Resizable>
       </ResizerWrapper>
     </main>
   );

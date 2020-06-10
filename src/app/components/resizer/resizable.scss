@@ -1,22 +1,29 @@
 .resizable-block {
+    --anchor-offset: -8px;
+    --anchor-size: 20px;
+    --anchor-center: calc(50% - var(--anchor-size) / 2);
+
     background: var(--text-color);
-    width: 100px;
-    height: 100px;
     position: absolute;
-    top: 100px;
-    left: 100px;
 
     .resizable-content {
         width: 100%;
         height: 100%;
         border: 4px solid var(--primary-color);
         box-sizing: border-box;
+        padding: calc(var(--anchor-offset) * -1);
+        display: flex;
+        overflow: hidden;
+        justify-items: stretch;
+
+
+        &>* {
+            flex: 1 1;
+            width: 100%;
+            height: 100%;
+        }
 
         .anchor {
-            --anchor-offset: -8px;
-            --anchor-size: 20px;
-            --anchor-center: calc(50% - var(--anchor-size) / 2);
-
             width: var(--anchor-size);
             height: var(--anchor-size);
             box-sizing: border-box;
@@ -26,25 +33,25 @@
             position: absolute;
 
 
-            &.n{
+            &.n {
                 top: var(--anchor-offset);
                 left: var(--anchor-center);
                 cursor: ns-resize;
             }
 
-            &.s{
+            &.s {
                 bottom: var(--anchor-offset);
                 left: var(--anchor-center);
                 cursor: ns-resize;
             }
 
-            &.e{
+            &.e {
                 top: var(--anchor-center);
                 right: var(--anchor-offset);
                 cursor: ew-resize;
             }
 
-            &.w{
+            &.w {
                 top: var(--anchor-center);
                 left: var(--anchor-offset);
                 cursor: ew-resize;

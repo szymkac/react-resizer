@@ -37,7 +37,7 @@ const handleResize = (onMoveEvent, element, anchor) => {
     })
 }
 
-const Resizable = () => {
+const Resizable = ({ children, ...styleProps }) => {
     const resizableRef = useRef();
 
     const onStartResize = onMouseDownEvent => {
@@ -60,7 +60,7 @@ const Resizable = () => {
         };
     };
 
-    return <section ref={resizableRef} className='resizable-block'>
+    return <section ref={resizableRef} style={styleProps} className='resizable-block'>
         <section className='resizable-content'>
             <div name='n' className='anchor n' onMouseDown={onStartResize}></div>
             <div name='e' className='anchor e' onMouseDown={onStartResize}></div>
@@ -70,6 +70,7 @@ const Resizable = () => {
             <div name='ne' className='anchor ne' onMouseDown={onStartResize}></div>
             <div name='sw' className='anchor sw' onMouseDown={onStartResize}></div>
             <div name='se' className='anchor se' onMouseDown={onStartResize}></div>
+            {children}
         </section>
     </section>
 }
