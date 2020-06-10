@@ -9,38 +9,68 @@
     .resizable-content {
         width: 100%;
         height: 100%;
-        border: 5px solid var(--primary-color);
+        border: 4px solid var(--primary-color);
         box-sizing: border-box;
 
         .anchor {
-            width: 12px;
-            height: 12px;
+            --anchor-offset: -8px;
+            --anchor-size: 20px;
+            --anchor-center: calc(50% - var(--anchor-size) / 2);
+
+            width: var(--anchor-size);
+            height: var(--anchor-size);
+            box-sizing: border-box;
+            border: 4px solid var(--primary-color);
             border-radius: 50%;
             background: var(--text-color);
-            border: 5px solid var(--primary-color);
             position: absolute;
 
+
+            &.n{
+                top: var(--anchor-offset);
+                left: var(--anchor-center);
+                cursor: ns-resize;
+            }
+
+            &.s{
+                bottom: var(--anchor-offset);
+                left: var(--anchor-center);
+                cursor: ns-resize;
+            }
+
+            &.e{
+                top: var(--anchor-center);
+                right: var(--anchor-offset);
+                cursor: ew-resize;
+            }
+
+            &.w{
+                top: var(--anchor-center);
+                left: var(--anchor-offset);
+                cursor: ew-resize;
+            }
+
             &.nw {
-                left: -6px;
-                top: -6px;
+                top: var(--anchor-offset);
+                left: var(--anchor-offset);
                 cursor: nwse-resize;
             }
 
             &.ne {
-                right: -6px;
-                top: -6px;
+                top: var(--anchor-offset);
+                right: var(--anchor-offset);
                 cursor: nesw-resize;
             }
 
             &.sw {
-                left: -6px;
-                bottom: -6px;
+                bottom: var(--anchor-offset);
+                left: var(--anchor-offset);
                 cursor: nesw-resize;
             }
 
             &.se {
-                right: -6px;
-                bottom: -6px;
+                bottom: var(--anchor-offset);
+                right: var(--anchor-offset);
                 cursor: nwse-resize;
             }
         }
