@@ -17,47 +17,53 @@ const dimensionHelpers = {
     horizontal: { size: 'width', cursor: 'pageX', pos: 'left', oppositeSize: 'height' },
 }
 
-const calculateNewSize = (dir, element, onMoveEvent, allowOverflow) => {
+const calculateNewSize = (dir, element, onMoveEvent, allowOverflow, centered) => {
     const boundingClientRect = element.getBoundingClientRect();
     const parentBoundingClientRect = element.parentElement.getBoundingClientRect();
     const { sizeFactor, deltaFactor, changePos, dimension } = resizeFactors[dir];
     const { size, cursor, pos, oppositeSize } = dimensionHelpers[dimension];
 
+    const isCentered = centered && dimension === 'horizontal';
     const overflow = !(onMoveEvent[cursor] > parentPadding && onMoveEvent[cursor] < parentBoundingClientRect[size] - parentPadding);
-    const newSize = !allowOverflow && overflow ? boundingClientRect[size] :
+    let newSize = (!allowOverflow && overflow) || (allowOverflow && overflow && dir !== 's') ? boundingClientRect[size] :
         (boundingClientRect[size] * sizeFactor) + ((boundingClientRect[pos] - onMoveEvent[cursor]) * deltaFactor);
+
+    if (isCentered) {
+        const sizeDiff = newSize - boundingClientRect[size];
+        newSize += sizeDiff;
+    }
 
     if (newSize > minSize) {
         const newPos = changePos && onMoveEvent[cursor] > parentPadding ? onMoveEvent[cursor] : boundingClientRect[pos];
-        return { newSize, newPos, oppositeSize, size, pos, sizeChanges: newSize !== boundingClientRect[size] };
+        return { newSize, newPos, oppositeSize, size, pos, sizeChanges: newSize !== boundingClientRect[size], dimension };
     }
     else {
-        return { newSize: boundingClientRect[size], newPos: boundingClientRect[pos], oppositeSize, size, pos, sizeChanges: false };
+        return { newSize: boundingClientRect[size], newPos: boundingClientRect[pos], oppositeSize, size, pos, sizeChanges: false, dimension };
     }
 }
 
-const handleResize = (onMoveEvent, element, anchor, allowOverflow) => {
+const handleResize = (onMoveEvent, element, anchor, allowOverflow, centered) => {
     const style = element.style;
     const diagonal = anchor.length > 1;
 
     anchor.split('').forEach(dir => {
-        const { newSize, newPos, oppositeSize, size, pos } = calculateNewSize(dir, element, onMoveEvent, allowOverflow);
+        const { newSize, newPos, oppositeSize, size, pos, dimension } = calculateNewSize(dir, element, onMoveEvent, allowOverflow, centered);
         style[size] = newSize + 'px';
-        style[pos] = newPos + 'px';
+        style[pos] = centered && dimension === 'horizontal' ? '50%' : newPos + 'px';
         if (!diagonal && !style[oppositeSize]) {
             style[oppositeSize] = element.getBoundingClientRect()[oppositeSize] + 'px';
         }
     })
 }
 
-const handleResizeWithRatio = (onMoveEvent, element, anchor, allowOverflow) => {
+const handleResizeWithRatio = (onMoveEvent, element, anchor, allowOverflow, centered) => {
     const style = element.style;
     const boundingClientRect = element.getBoundingClientRect();
     const parentBoundingClientRect = element.parentElement.getBoundingClientRect();
     const { height: oldHeight, width: oldWidth } = boundingClientRect;
     const [verticalDir, horizontalDir] = anchor.split('');
 
-    const { newSize: newHeight, newPos: newTop, sizeChanges: heightChange } = calculateNewSize(verticalDir, element, onMoveEvent, allowOverflow);
+    const { newSize: newHeight, newPos: newTop, sizeChanges: heightChange } = calculateNewSize(verticalDir, element, onMoveEvent, allowOverflow, centered);
     if (heightChange) {
         const newWidth = oldWidth * newHeight / oldHeight;
         const newLeft = resizeFactors[horizontalDir].changePos ? boundingClientRect.left + oldWidth - newWidth : boundingClientRect.left;
@@ -67,40 +73,47 @@ const handleResizeWithRatio = (onMoveEvent, element, anchor, allowOverflow) => {
             style.width = newWidth + 'px';
             style.height = newHeight + 'px';
             style.top = newTop + 'px';
-            style.left = newLeft + 'px';
+            style.left = centered ? '50%' : newLeft + 'px';
         }
     }
 }
 
-const Resizable = ({ children, keepRatio, allowOverflow = false, ...styleProps }) => {
+const Resizable = ({ children, keepRatio, allowOverflow = false, centered = false, ...styleProps }) => {
     const resizableRef = useRef();
 
     const onStartResize = onMouseDownEvent => {
         onMouseDownEvent.preventDefault()
-        const { parentElement } = resizableRef.current;
-        parentElement.addEventListener('mousemove', onResize);
-        parentElement.addEventListener('mouseup', onStopResize);
-        parentElement.addEventListener('mouseleave', onStopResize);
+        const targetElement = allowOverflow ? document : resizableRef.current.parentElement;
+
+        targetElement.addEventListener('mousemove', onResize);
+        targetElement.addEventListener('mouseup', onStopResize);
+        targetElement.addEventListener('mouseleave', onStopResize);
 
         const anchor = onMouseDownEvent.target.getAttribute('name');
 
         function onResize(onMoveEvent) {
             if (keepRatio) {
-                handleResizeWithRatio(onMoveEvent, resizableRef.current, anchor, allowOverflow)
+                handleResizeWithRatio(onMoveEvent, resizableRef.current, anchor, allowOverflow, centered)
             }
             else {
-                handleResize(onMoveEvent, resizableRef.current, anchor, allowOverflow);
+                handleResize(onMoveEvent, resizableRef.current, anchor, allowOverflow, centered);
             }
         };
 
         function onStopResize() {
-            parentElement.removeEventListener('mousemove', onResize);
-            parentElement.removeEventListener('mouseleave', onStopResize);
-            parentElement.removeEventListener('mouseup', onStopResize);
+            targetElement.removeEventListener('mousemove', onResize);
+            targetElement.removeEventListener('mouseup', onStopResize);
+            targetElement.removeEventListener('mouseleave', onStopResize);
         };
     };
 
-    return <section ref={resizableRef} style={styleProps} className='resizable-block'>
+
+    let possitionStyles = { ...styleProps };
+    if (centered) {
+        possitionStyles.left = '50%';
+    }
+
+    return <section ref={resizableRef} style={possitionStyles} className={`resizable-block${centered ? ' center' : ''}`}>
         <section className='resizable-content'>
             {!keepRatio && <div name='n' className='anchor n' onMouseDown={onStartResize}></div>}
             {!keepRatio && <div name='e' className='anchor e' onMouseDown={onStartResize}></div>}

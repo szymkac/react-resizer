@@ -1,5 +1,8 @@
 .resizer-wrapper{
     width: 100vw;
-    height: 100vh;
+    min-height: 50vh;
     overflow: hidden;
+    background-color: #d3d2d2;
+    position: relative;
+    overflow: visible;
 }
