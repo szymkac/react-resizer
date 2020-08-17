@@ -5,6 +5,14 @@
 
     background: var(--text-color);
     position: absolute;
+    z-index: 9999;
+    max-width: calc(100% - 24px);
+
+    &.center{
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 
     .resizable-content {
         width: 100%;

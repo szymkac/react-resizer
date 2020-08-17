@@ -1,4 +1,23 @@
-.resizer-wrapper{
-    width: 100vw;
-    height: 100vh;
+.resizer-wrapper {
+  width: 100%;
+  background-color: #d3d2d2;
+  position: relative;
+  overflow: visible;
+}
+
+.resizer-wrapper-outer {
+  --wrapper-margin: 11px;
+  --inner-wrapper-size: calc(100% - var(--wrapper-margin) * 2);
+
+  width: 100%;
+  height: 100%;
+  background-color: #d3d2d2;
+  position: relative;
+
+  .resizer-wrapper-inner {
+    width: var(--inner-wrapper-size);
+    height: 100%;
+    position: relative;
+    overflow: visible;
+  }
 }
