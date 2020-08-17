@@ -6,7 +6,11 @@
     background: var(--text-color);
     position: absolute;
     z-index: 9999;
+<<<<<<< HEAD:src/app/components/resizer/resizable.scss
 
+=======
+    max-width: calc(100% - 24px);
+>>>>>>> feature/keep-ratio:src/app/components/resizer/resizable/resizable.scss
 
     &.center{
         top: 50%;

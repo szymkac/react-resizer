@@ -2,8 +2,8 @@ import React from 'react';
 
 import './resizerWrapper.scss'
 
-const ResizerWrapper = ({ children }) => {
-    return <section className='resizer-wrapper'>
+const ResizerWrapper = ({ children, minHeight, height }) => {
+    return <section className='resizer-wrapper' style={{ minHeight, height }}>
         {children}
     </section>
 }
