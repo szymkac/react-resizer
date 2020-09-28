@@ -76,13 +76,13 @@ export const handleResizeWithRatio = (onMoveEvent, element, directions, { allowO
     const { height: oldHeight, width: oldWidth } = boundingClientRect;
     const [verticalDir, horizontalDir] = directions.split('');
 
-    const { newSize: newHeight, newPos: newTop, sizeChanges: heightChange, overflowing } = calculateNewSize(verticalDir, element, onMoveEvent, allowOverflow, centered);
-    if (heightChange) {
-        const newWidth = oldWidth * newHeight / oldHeight;
-        const newLeft = resizeFactors[horizontalDir].changePos ? boundingClientRect.left + oldWidth - newWidth : boundingClientRect.left;
-        const overflowRight = parentBoundingClientRect.width < newWidth + newLeft;
+    const { newSize: newWidth, newPos: newLeft, sizeChanges: widthChange, overflowing: overflowRight } = calculateNewSize(horizontalDir, element, onMoveEvent, allowOverflow, centered);
+    if (widthChange) {
+        const newHeight = oldHeight * newWidth / oldWidth;
+        const newTop = resizeFactors[verticalDir].changePos ? boundingClientRect.top + oldHeight - newHeight : boundingClientRect.top;
+        const overflowTop = parentBoundingClientRect.height < newHeight + newTop;
 
-        if (newWidth > minSize && newLeft >= 0 && !overflowRight) {
+        if (newHeight > minSize && newTop >= 0 && !overflowRight) {
             style.width = newWidth + 'px';
             style.height = newHeight + 'px';
             if (newTop !== null) {
@@ -91,7 +91,7 @@ export const handleResizeWithRatio = (onMoveEvent, element, directions, { allowO
             style.left = centered ? '50%' : newLeft + 'px';
 
             if (verticalDir === 's') {
-                handleOverflow(element, overflowing);
+                handleOverflow(element, overflowTop);
             }
         }
     }
