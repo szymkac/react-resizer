@@ -1,96 +1,126 @@
 .resizable-block {
-    --anchor-offset: -8px;
-    --anchor-size: 20px;
-    --anchor-center: calc(50% - var(--anchor-size) / 2);
+  --border-width: 4px;
+  --anchor-offset: calc(var(--border-width) * -1);
+  --triangle-anchor-size: 16px;
+  --rectangle-anchor-size: 12px;
+  --anchor-center: calc(50% - var(--rectangle-anchor-size) / 2);
+  --hover-color: cyan;
 
-    background: var(--text-color);
+  background: var(--text-color);
+  position: absolute;
+  z-index: 9999;
+  max-width: 100%;
+
+  &.center {
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .resizable-border {
+    box-sizing: border-box;
+    background: transparent;
+    border: var(--border-width) solid var(--primary-color);
     position: absolute;
-    z-index: 9999;
-<<<<<<< HEAD:src/app/components/resizer/resizable.scss
+    z-index: 10000;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
-=======
-    max-width: calc(100% - 24px);
->>>>>>> feature/keep-ratio:src/app/components/resizer/resizable/resizable.scss
+    .anchor {
+      position: absolute;
 
-    &.center{
-        top: 50%;
-        left: 50%;
-        transform: translateX(-50%);
-    }
+      &.rectangle {
+        width: var(--rectangle-anchor-size);
+        height: var(--rectangle-anchor-size);
+        background: var(--primary-color);
 
-    .resizable-content {
-        width: 100%;
-        height: 100%;
-        border: 4px solid var(--primary-color);
-        box-sizing: border-box;
-        padding: calc(var(--anchor-offset) * -1);
-        display: flex;
-        overflow: hidden;
-        justify-items: stretch;
-
-        &>* {
-            flex: 1 1 100%;
-            width: 100%;
-            height: 100%;
+        &.n {
+          top: var(--anchor-offset);
+          left: var(--anchor-center);
+          cursor: ns-resize;
         }
 
-        .anchor {
-            width: var(--anchor-size);
-            height: var(--anchor-size);
-            box-sizing: border-box;
-            border: 4px solid var(--primary-color);
-            border-radius: 50%;
-            background: var(--text-color);
-            position: absolute;
-
-
-            &.n {
-                top: var(--anchor-offset);
-                left: var(--anchor-center);
-                cursor: ns-resize;
-            }
-
-            &.s {
-                bottom: var(--anchor-offset);
-                left: var(--anchor-center);
-                cursor: ns-resize;
-            }
-
-            &.e {
-                top: var(--anchor-center);
-                right: var(--anchor-offset);
-                cursor: ew-resize;
-            }
-
-            &.w {
-                top: var(--anchor-center);
-                left: var(--anchor-offset);
-                cursor: ew-resize;
-            }
-
-            &.nw {
-                top: var(--anchor-offset);
-                left: var(--anchor-offset);
-                cursor: nwse-resize;
-            }
-
-            &.ne {
-                top: var(--anchor-offset);
-                right: var(--anchor-offset);
-                cursor: nesw-resize;
-            }
-
-            &.sw {
-                bottom: var(--anchor-offset);
-                left: var(--anchor-offset);
-                cursor: nesw-resize;
-            }
-
-            &.se {
-                bottom: var(--anchor-offset);
-                right: var(--anchor-offset);
-                cursor: nwse-resize;
-            }
+        &.s {
+          bottom: var(--anchor-offset);
+          left: var(--anchor-center);
+          cursor: ns-resize;
         }
+
+        &.e {
+          top: var(--anchor-center);
+          right: var(--anchor-offset);
+          cursor: ew-resize;
+        }
+
+        &.w {
+          top: var(--anchor-center);
+          left: var(--anchor-offset);
+          cursor: ew-resize;
+        }
+
+        &:hover {
+          background: var(--hover-color);
+        }
+      }
+
+      &.triangle {
+        width: 0;
+        height: 0;
+
+        &.n {
+          border-top: var(--triangle-anchor-size) solid var(--primary-color);
+          top: var(--anchor-offset);
+
+          &.w {
+            border-right: var(--triangle-anchor-size) solid transparent;
+            left: var(--anchor-offset);
+            cursor: nwse-resize;
+          }
+
+          &.e {
+            border-left: var(--triangle-anchor-size) solid transparent;
+            right: var(--anchor-offset);
+            cursor: nesw-resize;
+          }
+
+          &:hover {
+            border-top-color: var(--hover-color);
+          }
+        }
+
+        &.s {
+          border-bottom: var(--triangle-anchor-size) solid var(--primary-color);
+          bottom: var(--anchor-offset);
+
+          &.w {
+            border-right: var(--triangle-anchor-size) solid transparent;
+            left: var(--anchor-offset);
+            cursor: nesw-resize;
+          }
+
+          &.e {
+            border-left: var(--triangle-anchor-size) solid transparent;
+            right: var(--anchor-offset);
+            cursor: nwse-resize;
+          }
+
+          &:hover {
+            border-bottom-color: var(--hover-color);
+          }
+        }
+      }
     }
+  }
+
+  .resizable-content {
+    width: 100%;
+    height: 100%;
+
+    & > *{
+      width: 100%;
+      height: 100%;
+    }
+  }
 }

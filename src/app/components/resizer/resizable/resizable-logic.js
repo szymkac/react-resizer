@@ -1,10 +1,5 @@
 import { minSize, resizeFactors, dimensionHelpers, units } from './resizable-consts';
 
-/**
-TODO
-add units
- */
-
 export const calculateNewSize = (dir, element, onMoveEvent, allowOverflow, centered) => {
     const boundingClientRect = getElementBounding(element);
     const parentBoundingClientRect = getElementBounding(element.parentElement);
@@ -82,7 +77,7 @@ export const handleResizeWithRatio = (onMoveEvent, element, directions, { allowO
         const newTop = resizeFactors[verticalDir].changePos ? boundingClientRect.top + oldHeight - newHeight : boundingClientRect.top;
         const overflowTop = parentBoundingClientRect.height < newHeight + newTop;
 
-        if (newHeight > minSize && newTop >= 0 && !overflowRight) {
+        if (newHeight > minSize && newTop >= 0 && !overflowRight && (!overflowTop || overflowTop && allowOverflow)) {
             style.width = newWidth + 'px';
             style.height = newHeight + 'px';
             if (newTop !== null) {

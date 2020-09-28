@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 
 import { handleResize, getElementBounding, handleOverflow, handleUnits } from './resizable-logic';
-import './resizable-new.scss';
+import './resizable.scss';
 
 
 
@@ -49,7 +49,7 @@ const Resizable = ({ children, keepRatio = false, allowOverflow = false, centere
     };
 
 
-    let possitionStyles = { top: 0 + 'px', ...styleProps };
+    let possitionStyles = { top: '0px', ...styleProps };
     if (centered) {
         possitionStyles.left = '50%';
     }
