@@ -77,7 +77,7 @@ export const handleResizeWithRatio = (onMoveEvent, element, directions, { allowO
         const newTop = resizeFactors[verticalDir].changePos ? boundingClientRect.top + oldHeight - newHeight : boundingClientRect.top;
         const overflowTop = parentBoundingClientRect.height < newHeight + newTop;
 
-        if (newHeight > minSize && newTop >= 0 && !overflowRight && (!overflowTop || overflowTop && allowOverflow)) {
+        if (newHeight > minSize && newTop >= 0 && !overflowRight && ((overflowTop && allowOverflow) || !overflowTop)) {
             style.width = newWidth + 'px';
             style.height = newHeight + 'px';
             if (newTop !== null) {
